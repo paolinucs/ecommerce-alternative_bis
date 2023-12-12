@@ -52,8 +52,13 @@ public class ProductController {
     public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO data) {
 
         if (data != null) {
-            try {
+            try {// try catch serve per la gestione delle eccezioni
+
+                // converte il dato in DTO che sta in input in un'entità normale
                 Product convertedDataDto = productService.convertToProduct(data);
+
+                // ricreo un oggetto dto che corrisponde al ritorno convertito di
+                // productService.saveproduct(convertedDataDto)
                 ProductDTO returningProductData = productService
                         .convertToProductDto(productService.saveProduct(convertedDataDto));
                 return ResponseEntity.ok(returningProductData);
