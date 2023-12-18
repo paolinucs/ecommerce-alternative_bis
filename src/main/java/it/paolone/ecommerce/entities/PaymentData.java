@@ -59,7 +59,7 @@ public class PaymentData {
     }
 
     public void setExpiresMonth(String expiresMonth) {
-        expiresMonth = expiresMonth;
+        this.expiresMonth = expiresMonth;
     }
 
     public void setExpiresYear(String expiresYear) {

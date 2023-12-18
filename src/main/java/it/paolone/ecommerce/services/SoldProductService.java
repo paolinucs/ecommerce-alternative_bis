@@ -3,31 +3,28 @@ package it.paolone.ecommerce.services;
 import java.util.List;
 import java.util.Optional;
 import it.paolone.ecommerce.entities.SoldProducts;
-import it.paolone.ecommerce.repositories.SoldProductsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.paolone.ecommerce.implementations.SoldProductsRepositoryImpl;
+import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class SoldProductService {
 
-        private final SoldProductsRepository soldProductsRepository;
-
-        @Autowired
-        public SoldProductService(SoldProductsRepository soldProductsRepository) {
-                this.soldProductsRepository = soldProductsRepository;
-        }
+        private final SoldProductsRepositoryImpl soldProductsRepositoryImpl;
 
         public SoldProducts getSoldProductById(Long id) {
-                Optional<SoldProducts> fetchedSoldProduct = soldProductsRepository.findById(id);
+                Optional<SoldProducts> fetchedSoldProduct = soldProductsRepositoryImpl.findById(id);
                 return fetchedSoldProduct.orElse(null);
         }
 
         public List<SoldProducts> getAllSoldProducts() {
-                return soldProductsRepository.findAll();
+                return soldProductsRepositoryImpl.findAll();
         }
 
         public SoldProducts saveSoldProduct(SoldProducts data) {
-                return soldProductsRepository.save(data);
+                return soldProductsRepositoryImpl.save(data);
         }
 
 }

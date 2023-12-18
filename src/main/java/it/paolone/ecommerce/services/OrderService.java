@@ -2,38 +2,35 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.OrderDTO;
 import it.paolone.ecommerce.entities.Order;
-import it.paolone.ecommerce.repositories.OrderRepository;
+import it.paolone.ecommerce.implementations.OrderRepositoryImpl;
+import lombok.AllArgsConstructor;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class OrderService {
 
-    private final OrderRepository orderRepository;
+    private final OrderRepositoryImpl orderRepositoryImpl;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public OrderService(OrderRepository orderRepository, ModelMapper modelMapper) {
-        this.orderRepository = orderRepository;
-        this.modelMapper = modelMapper;
-    }
 
     public Order getOrderById(Long id) {
-        Optional<Order> fetchedOrder = orderRepository.findById(id);
+        Optional<Order> fetchedOrder = orderRepositoryImpl.findById(id);
         return fetchedOrder.orElse(null);
     }
 
     public List<Order> getAllOrders() {
-        List<Order> fetchedOrders = orderRepository.findAll();
+        List<Order> fetchedOrders = orderRepositoryImpl.findAll();
         return fetchedOrders;
     }
 
     public Order saveOrder(Order data) {
-        return orderRepository.save(data);
+        return orderRepositoryImpl.save(data);
     }
 
     public OrderDTO convertToOrderDTO(Order data) {

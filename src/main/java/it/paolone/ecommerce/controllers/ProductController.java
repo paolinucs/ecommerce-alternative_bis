@@ -4,9 +4,9 @@ import java.util.List;
 import it.paolone.ecommerce.dto.ProductDTO;
 import it.paolone.ecommerce.entities.Product;
 import it.paolone.ecommerce.services.ProductService;
+import lombok.AllArgsConstructor;
 import it.paolone.ecommerce.repositories.ProductRepository;
 import it.paolone.ecommerce.services.FileUploadService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +17,12 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/products")
+@AllArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
     private final FileUploadService fileUploadService;
     private final ProductRepository productRepository;
-
-    @Autowired
-    public ProductController(ProductRepository productRepository, ProductService productService,
-            FileUploadService fileUploadService) {
-        this.productService = productService;
-        this.fileUploadService = fileUploadService;
-        this.productRepository = productRepository;
-    }
 
     @GetMapping("/all_products")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {

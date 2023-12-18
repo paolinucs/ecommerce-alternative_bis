@@ -2,35 +2,31 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.ShippingDTO;
 import it.paolone.ecommerce.entities.Shipping;
-import it.paolone.ecommerce.repositories.ShippingRepository;
+import it.paolone.ecommerce.implementations.ShippingRepositoryImpl;
+import lombok.AllArgsConstructor;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 public class ShippingService {
 
-    private final ShippingRepository shippingRepository;
+    private final ShippingRepositoryImpl shippingRepositoryImpl;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public ShippingService(ShippingRepository shippingRepository, ModelMapper modelMapper) {
-        this.shippingRepository = shippingRepository;
-        this.modelMapper = modelMapper;
-    }
-
     public Shipping getShippingById(Long id) {
-        Optional<Shipping> fetchedShipping = shippingRepository.findById(id);
+        Optional<Shipping> fetchedShipping = shippingRepositoryImpl.findById(id);
         return fetchedShipping.orElse(null);
     }
 
     public List<Shipping> getAllPaymentData() {
-        return shippingRepository.findAll();
+        return shippingRepositoryImpl.findAll();
     }
 
     public Shipping saveShippping(Shipping data) {
-        return shippingRepository.save(data);
+        return shippingRepositoryImpl.save(data);
     }
 
     public ShippingDTO convertToShippingDTO(Shipping data) {

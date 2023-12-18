@@ -2,36 +2,31 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.PaymentDataDTO;
 import it.paolone.ecommerce.entities.PaymentData;
-import it.paolone.ecommerce.repositories.PaymentDataRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import it.paolone.ecommerce.implementations.PaymentDataRepositoryImpl;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
 
+@AllArgsConstructor
 public class PaymentDataService {
 
-    private final PaymentDataRepository paymentDataRepository;
+    private final PaymentDataRepositoryImpl paymentDataRepositoryImpl;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public PaymentDataService(ModelMapper modelMapper, PaymentDataRepository paymentDataRepository) {
-        this.paymentDataRepository = paymentDataRepository;
-        this.modelMapper= modelMapper;
-    }
-
     public PaymentData getPaymentDataById(Long id) {
-        Optional<PaymentData> fetchedPaymentData = paymentDataRepository.findById(id);
+        Optional<PaymentData> fetchedPaymentData = paymentDataRepositoryImpl.findById(id);
         return fetchedPaymentData.orElse(null);
     }
 
     public List<PaymentData> getAllPaymentData() {
-        return paymentDataRepository.findAll();
+        return paymentDataRepositoryImpl.findAll();
 
     }
 
     public PaymentData savePaymentData(PaymentData data) {
-        return paymentDataRepository.save(data);
+        return paymentDataRepositoryImpl.save(data);
 
     }
 

@@ -1,22 +1,21 @@
 package it.paolone.ecommerce.controllers;
-// import org.
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import it.paolone.ecommerce.dto.PaymentDataDTO;
 import it.paolone.ecommerce.entities.PaymentData;
 import it.paolone.ecommerce.services.PaymentDataService;
+import lombok.RequiredArgsConstructor;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,16 +25,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/payments")
+@RequiredArgsConstructor
 public class PaymentDataController {
 
     private final PaymentDataService paymentDataService;
-                Logger logger = LoggerFactory.getLogger(PaymentDataController.class);
-
-
-    @Autowired
-    public PaymentDataController(PaymentDataService paymentDataService) {
-        this.paymentDataService = paymentDataService;
-    }
+    
+    private Logger logger = LoggerFactory.getLogger(PaymentDataController.class);
 
     @PostMapping("/save_payment_info")
     public ResponseEntity<PaymentDataDTO> savePayment(@RequestBody PaymentDataDTO paymentInfo) {
@@ -66,7 +61,7 @@ public class PaymentDataController {
         boolean isCvcValid = isValidCvc(paymentData.getCvc());
 
         if (!isCardNumberValid) {
-            logger.error("Il numero della carta non è valido!"); 
+            logger.error("Il numero della carta non è valido!");
             throw new IllegalArgumentException("Il numero della carta non è valido!");
         }
 
@@ -104,11 +99,8 @@ public class PaymentDataController {
             // Combina mese e anno in un formato valido per LocalDate
             LocalDate expirationDate = LocalDate.of(year, month, 1);
 
-            // Verifica se la data di scadenza è futura rispetto alla data corrente
-            //return expirationDate.isAfter(LocalDate.now.().month.equals.year)
-            int m = LocalDate.now().getMonthValue();
-            int y = LocalDate.now().getYear();
-            return expirationDate.isBefore(LocalDate.now().withMonth(LocalDate.now().getMonthValue()).withYear(LocalDate.now().getYear()));
+            return expirationDate.isBefore(
+                    LocalDate.now().withMonth(LocalDate.now().getMonthValue()).withYear(LocalDate.now().getYear()));
         } catch (DateTimeException | NumberFormatException e) {
             e.printStackTrace();
             return true;
@@ -128,8 +120,6 @@ public class PaymentDataController {
         return ResponseEntity.noContent().build();
     }
 }
-
-
 
 // private boolean isValidExpirationMonth(String expirationMonth) {
 // // Implementa la logica per verificare la validità della data di scadenza
