@@ -1,7 +1,9 @@
 package it.paolone.ecommerce.entities;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name= "transaction")
 @Entity
 public class Transaction {
@@ -22,7 +24,7 @@ public class Transaction {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "payment_type", referencedColumnName = "type_name")
-    private PaymentType paymentType;
+    // private PaymentType paymentType;
 
     public Long getId() {
         return id;
@@ -52,15 +54,15 @@ public class Transaction {
     return paymentData;
   }
 
-  public PaymentType getPaymentType() {
-    return paymentType;
-  }
+  // public PaymentType getPaymentType() {
+  //   return paymentType;
+  // }
 
   public void setPaymentData(PaymentData paymentData) {
     this.paymentData = paymentData;
   }
 
-  public void setPaymentType(PaymentType paymentType) {
-    this.paymentType = paymentType;
-  }
+  // public void setPaymentType(PaymentType paymentType) {
+  //   this.paymentType = paymentType;
+  // }
 }

@@ -1,22 +1,31 @@
 package it.paolone.ecommerce.controllers;
 
 import it.paolone.ecommerce.dto.OrderDetailsDTO;
+import it.paolone.ecommerce.dto.TransactionDetailsDTO;
 import it.paolone.ecommerce.services.OrderDetailsService;
+import it.paolone.ecommerce.services.TransactionDetailsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/orders")
 public class OrderDetailsController {
 
+
     public final OrderDetailsService orderDetailsService;
 
     @Autowired
     public OrderDetailsController(OrderDetailsService orderDetailsService){
-        this.orderDetailsService = orderDetailsService;
+            this.orderDetailsService = orderDetailsService;
+            
+    
     }
 
     @GetMapping("/get_all")
@@ -43,6 +52,7 @@ public class OrderDetailsController {
         }
     }
 
-    @PostMapping("")
+    
+    
 
 }

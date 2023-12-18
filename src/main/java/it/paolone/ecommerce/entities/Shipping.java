@@ -1,9 +1,11 @@
 package it.paolone.ecommerce.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Table(name = "shipping")
 @Entity
+@Data
 public class Shipping {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +23,7 @@ public class Shipping {
 
     @Column(name = "tracking_code")
     private String trackingCode;
-
+  
     public long getId() {
         return id;
     }

@@ -14,53 +14,60 @@ import java.util.List;
 
 @Service
 public class OrderDetailsService {
-
     private final ModelMapper modelMapper;
     private final CustomerService customerService;
     private final ShippingService shippingService;
     private final OrderService orderService;
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
+    @Autowired
     private final ShippingRepository shippingRepository;
 
     @Autowired
-    public OrderDetailsService(ShippingRepository shippingRepository, TransactionRepository transactionRepository,
-            CustomerRepository customerRepository,
-            OrderService orderService, OrderRepository orderRepository, ModelMapper modelMapper,
-            CustomerService customerService,
-            ShippingService shippingService, TransactionService transactionService) {
-        this.modelMapper = modelMapper;
-        this.customerService = customerService;
-        this.shippingService = shippingService;
-        this.orderRepository = orderRepository;
-        this.orderService = orderService;
-        this.customerRepository = customerRepository;
-        this.shippingRepository = shippingRepository;
+    public OrderDetailsService(ShippingRepository shippingRepository,
+    TransactionRepository transactionRepository,
+    CustomerRepository customerRepository,
+    OrderService orderService, OrderRepository orderRepository, ModelMapper
+    modelMapper,
+    CustomerService customerService,
+    ShippingService shippingService, TransactionService transactionService) {
+    this.modelMapper = modelMapper;
+    this.customerService = customerService;
+    this.shippingService = shippingService;
+    this.orderRepository = orderRepository;
+    this.orderService = orderService;
+    this.customerRepository = customerRepository;
+    this.shippingRepository = shippingRepository;
     }
 
-    public OrderDetailsDTO convertToOrderDetailsDto(Order order) {
-        CustomerDTO customerDtoData = customerService.convertToCustomerDTO(order.getJoinedCustomer());
-        ShippingDTO shippingDtoData = shippingService.convertToShippingDTO(order.getJoinedShipping());
+    // public OrderDetailsDTO convertToOrderDetailsDto(Order order) {
+    // CustomerDTO customerDtoData =
+    // customerService.convertToCustomerDTO(order.getJoinedCustomer());
+    // ShippingDTO shippingDtoData =
+    // shippingService.convertToShippingDTO(order.getJoinedShipping());
 
-        OrderDetailsDTO returnData = modelMapper.map(order, OrderDetailsDTO.class);
-        returnData.setCustomerDtoData(customerDtoData);
-        returnData.setShippingDtoData(shippingDtoData);
+    // OrderDetailsDTO returnData = modelMapper.map(order, OrderDetailsDTO.class);
+    // returnData.setCustomerDtoData(customerDtoData);
+    // returnData.setShippingDtoData(shippingDtoData);
 
-        return returnData;
+    // return returnData;
 
-    }
+    // }
 
-    public Order convertToOrder(OrderDetailsDTO orderDetailsDTO) {
-        Order orderData = orderService.convertToOrder(orderDetailsDTO.getOrderDtoData());
-        Customer customerData = customerService.convertToCustomer(orderDetailsDTO.getCustomerDtoData());
+    // public Order convertToOrder(OrderDetailsDTO orderDetailsDTO) {
+    // Order orderData =
+    // orderService.convertToOrder(orderDetailsDTO.getOrderDtoData());
+    // Customer customerData =
+    // customerService.convertToCustomer(orderDetailsDTO.getCustomerDtoData());
 
-        Shipping shippingData = shippingService.convertToShipping(orderDetailsDTO.getShippingDtoData());
+    // Shipping shippingData =
+    // shippingService.convertToShipping(orderDetailsDTO.getShippingDtoData());
 
-        orderData.setJoinedCustomer(customerData);
-        orderData.setJoinedShipping(shippingData);
+    // orderData.setJoinedCustomer(customerData);
+    // orderData.setJoinedShipping(shippingData);
 
-        return orderData;
-    }
+    // return orderData;
+    // }
 
     public List<OrderDetailsDTO> getAllOrdersDetails() {
         List<Order> ordersData = orderRepository.findAll();
