@@ -1,6 +1,11 @@
 package it.paolone.ecommerce.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 @Entity
 @Table(name = "payment_data")
@@ -15,7 +20,7 @@ public class PaymentData {
     @Column(name = "cvc")
     private String cvc;
     @Column(name = "expires_month")
-    private String ExpiresMonth;
+    private String expiresMonth;
     @Column(name = "expires_year")
     private String expiresYear;
 
@@ -34,7 +39,7 @@ public class PaymentData {
     }
 
     public String getExpiresMonth() {
-        return ExpiresMonth;
+        return expiresMonth;
     }
 
     public String getExpiresYear() {
@@ -54,10 +59,14 @@ public class PaymentData {
     }
 
     public void setExpiresMonth(String expiresMonth) {
-        ExpiresMonth = expiresMonth;
+        expiresMonth = expiresMonth;
     }
 
     public void setExpiresYear(String expiresYear) {
         this.expiresYear = expiresYear;
+    }
+
+    public List<PaymentData> getAllPaymentData() {
+        return null;
     }
 }
