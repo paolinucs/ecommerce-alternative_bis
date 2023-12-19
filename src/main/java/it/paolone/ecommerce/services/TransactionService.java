@@ -3,21 +3,17 @@ package it.paolone.ecommerce.services;
 import it.paolone.ecommerce.dto.TransactionDTO;
 import it.paolone.ecommerce.entities.Transaction;
 import it.paolone.ecommerce.repositories.TransactionRepository;
+import lombok.AllArgsConstructor;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public TransactionService(TransactionRepository transactionRepository, ModelMapper modelMapper) {
-        this.transactionRepository = transactionRepository;
-        this.modelMapper = modelMapper;
-    }
 
     public Transaction getTransactionById(Long id) {
         Optional<Transaction> fetchedTransaction = transactionRepository.findById(id);

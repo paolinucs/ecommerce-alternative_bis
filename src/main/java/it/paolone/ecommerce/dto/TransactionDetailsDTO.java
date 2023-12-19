@@ -1,6 +1,5 @@
 package it.paolone.ecommerce.dto;
 
-import it.paolone.ecommerce.entities.PaymentData;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
