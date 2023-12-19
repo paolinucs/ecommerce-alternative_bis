@@ -2,7 +2,7 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.OrderDTO;
 import it.paolone.ecommerce.entities.Order;
-import it.paolone.ecommerce.implementations.OrderRepositoryImpl;
+import it.paolone.ecommerce.repositories.OrderRepository;
 import lombok.AllArgsConstructor;
 
 import org.modelmapper.ModelMapper;
@@ -15,22 +15,22 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderService {
 
-    private final OrderRepositoryImpl orderRepositoryImpl;
+    private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
 
 
     public Order getOrderById(Long id) {
-        Optional<Order> fetchedOrder = orderRepositoryImpl.findById(id);
+        Optional<Order> fetchedOrder = orderRepository.findById(id);
         return fetchedOrder.orElse(null);
     }
 
     public List<Order> getAllOrders() {
-        List<Order> fetchedOrders = orderRepositoryImpl.findAll();
+        List<Order> fetchedOrders = orderRepository.findAll();
         return fetchedOrders;
     }
 
     public Order saveOrder(Order data) {
-        return orderRepositoryImpl.save(data);
+        return orderRepository.save(data);
     }
 
     public OrderDTO convertToOrderDTO(Order data) {

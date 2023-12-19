@@ -2,10 +2,9 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.ProductDTO;
 import it.paolone.ecommerce.entities.Product;
+import it.paolone.ecommerce.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import it.paolone.ecommerce.implementations.ProductRepositoryImpl;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -17,38 +16,38 @@ import java.util.Optional;
 public class ProductService {
 
     private final ModelMapper modelMapper;
-    private final ProductRepositoryImpl productRepositoryImpl;
+    private final ProductRepository productRepository;
 
     public Product getProductById(Long id) {
-        Optional<Product> fetchedProduct = productRepositoryImpl.findById(id);
+        Optional<Product> fetchedProduct = productRepository.findById(id);
         return fetchedProduct.orElse(null);
     }
 
     public List<Product> getAllProducts() {
-        return productRepositoryImpl.findAll();
+        return productRepository.findAll();
     }
 
     public Product saveProduct(Product data) {
         Optional<Product> eventuallyExistingProduct = Optional
-                .ofNullable(productRepositoryImpl.searchProductByBarcode(data.getBarcode()));
+                .ofNullable(productRepository.searchProductByBarcode(data.getBarcode()));
 
         if (eventuallyExistingProduct.isPresent()) {
             Product existingData = eventuallyExistingProduct.get();
             int newQuantity = data.getQuantity() + existingData.getQuantity();
-            productRepositoryImpl.updateProductQuantityByBarcode(data.getBarcode(), newQuantity);
-            return productRepositoryImpl.searchProductByBarcode(data.getBarcode());
+            productRepository.updateProductQuantityByBarcode(data.getBarcode(), newQuantity);
+            return productRepository.searchProductByBarcode(data.getBarcode());
         } else {
-            return productRepositoryImpl.save(data);
+            return productRepository.save(data);
         }
     }
 
     public Product rePriceProduct(String productBarcode, float newPrice) {
         Optional<Product> fetchedProduct = Optional
-                .ofNullable(productRepositoryImpl.searchProductByBarcode(productBarcode));
+                .ofNullable(productRepository.searchProductByBarcode(productBarcode));
 
         if (fetchedProduct.isPresent()) {
-            productRepositoryImpl.updateProductPriceByBarcode(productBarcode, newPrice);
-            return productRepositoryImpl.searchProductByBarcode(productBarcode);
+            productRepository.updateProductPriceByBarcode(productBarcode, newPrice);
+            return productRepository.searchProductByBarcode(productBarcode);
         }
 
         return null;
@@ -57,10 +56,10 @@ public class ProductService {
 
     public Product removeProductByBarcode(String productBarcode) {
         Optional<Product> fetchedProduct = Optional
-                .ofNullable(productRepositoryImpl.searchProductByBarcode(productBarcode));
+                .ofNullable(productRepository.searchProductByBarcode(productBarcode));
 
         if (fetchedProduct.isPresent()) {
-            productRepositoryImpl.deleteProductByBarcode(productBarcode);
+            productRepository.deleteProductByBarcode(productBarcode);
             return fetchedProduct.get();
         }
 

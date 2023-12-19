@@ -2,16 +2,24 @@ package it.paolone.ecommerce.configuration;
 
 import it.paolone.ecommerce.dto.*;
 import it.paolone.ecommerce.entities.*;
+import it.paolone.ecommerce.repositories.PaymentDataRepository;
 import it.paolone.ecommerce.repositories.ShippingRepository;
 import it.paolone.ecommerce.repositories.TransactionRepository;
 import it.paolone.ecommerce.services.FileUploadService;
+import it.paolone.ecommerce.services.PaymentDataService;
 import it.paolone.ecommerce.services.ShippingService;
 import it.paolone.ecommerce.services.TransactionService;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+// @EnableJpaRepositories(basePackages = "it.paolone.ecommerce.repositories")
+// @EnableTransactionManagement
+// @EntityScan
 public class AppConfig {
 
     @Bean
@@ -47,10 +55,14 @@ public class AppConfig {
         return new TransactionService(transactionRepository, modelMapper);
     }
 
-
+    @Bean
+    public PaymentDataService paymentDataService(PaymentDataRepository paymentDataRepository, ModelMapper modelMapper){
+        return new PaymentDataService(paymentDataRepository, modelMapper);
+    }
 
     @Bean
     public FileUploadService fileUploadService() {
         return new FileUploadService();
     }
+
 }

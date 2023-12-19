@@ -2,7 +2,7 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.CustomerDTO;
 import it.paolone.ecommerce.entities.Customer;
-import it.paolone.ecommerce.implementations.CustomerRepositoryImpl;
+import it.paolone.ecommerce.repositories.CustomerRepository;
 import lombok.AllArgsConstructor;
 
 import org.modelmapper.ModelMapper;
@@ -16,21 +16,21 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CustomerService {
 
-    private final CustomerRepositoryImpl customerRepositoryImpl;
+    private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
 
     public Customer getCustomerById(Long query) {
-        Optional<Customer> fetchedCustomer = customerRepositoryImpl.findById(query);
+        Optional<Customer> fetchedCustomer = customerRepository.findById(query);
         return fetchedCustomer.orElse(null);
     }
 
     public List<Customer> getAllCustomers() {
-        List<Customer> fetchedCustomers = customerRepositoryImpl.findAll();
+        List<Customer> fetchedCustomers = customerRepository.findAll();
         return fetchedCustomers;
     }
 
     public Customer saveCustomer(Customer data) {
-        return customerRepositoryImpl.save(data);
+        return customerRepository.save(data);
     }
 
     public CustomerDTO convertToCustomerDTO(Customer data) {

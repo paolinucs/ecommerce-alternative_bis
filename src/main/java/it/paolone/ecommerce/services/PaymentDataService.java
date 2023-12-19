@@ -2,7 +2,7 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.PaymentDataDTO;
 import it.paolone.ecommerce.entities.PaymentData;
-import it.paolone.ecommerce.implementations.PaymentDataRepositoryImpl;
+import it.paolone.ecommerce.repositories.PaymentDataRepository;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -12,21 +12,21 @@ import org.modelmapper.ModelMapper;
 @AllArgsConstructor
 public class PaymentDataService {
 
-    private final PaymentDataRepositoryImpl paymentDataRepositoryImpl;
+    private final PaymentDataRepository paymentDataRepository;
     private final ModelMapper modelMapper;
 
     public PaymentData getPaymentDataById(Long id) {
-        Optional<PaymentData> fetchedPaymentData = paymentDataRepositoryImpl.findById(id);
+        Optional<PaymentData> fetchedPaymentData = paymentDataRepository.findById(id);
         return fetchedPaymentData.orElse(null);
     }
 
     public List<PaymentData> getAllPaymentData() {
-        return paymentDataRepositoryImpl.findAll();
+        return paymentDataRepository.findAll();
 
     }
 
     public PaymentData savePaymentData(PaymentData data) {
-        return paymentDataRepositoryImpl.save(data);
+        return paymentDataRepository.save(data);
 
     }
 

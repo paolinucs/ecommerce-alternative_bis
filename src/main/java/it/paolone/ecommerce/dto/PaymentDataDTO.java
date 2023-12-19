@@ -1,7 +1,7 @@
 package it.paolone.ecommerce.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.validation.constraints.Pattern;
+// import jakarta.validation.constraints.Pattern;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PaymentDataDTO {
