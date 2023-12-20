@@ -41,4 +41,8 @@ public class CustomerService {
         return modelMapper.map(data, Customer.class);
     }
 
+    public Boolean isCustomerAlreadyRegistered(Customer data) {
+        return customerRepository.countByEmail(data.getEmail()) > 0;
+    }
+
 }

@@ -1,9 +1,11 @@
 package it.paolone.ecommerce.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "product")
+@Data
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,55 +21,5 @@ public class Product {
     private int productQuantity;
     @Column(name = "price")
     private float productPrice;
-
-    // getters and setters
-
-    public float getproductPrice() {
-        return productPrice;
-    }
-
-    public void setProductPrice(float productPrice) {
-        this.productPrice = productPrice;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public String getBarcode() {
-        return productBarcode;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setBarcode(String barcode) {
-        this.productBarcode = barcode;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public int getQuantity() {
-        return productQuantity;
-    }
-
-    public void setQuantity(short quantity) {
-        this.productQuantity = quantity;
-    }
-
-    public String getImageFileName() {
-        return this.imageFilename;
-    }
-
-    public void setImageFilename(String imageFileName) {
-        this.imageFilename = imageFileName;
-    }
 
 }

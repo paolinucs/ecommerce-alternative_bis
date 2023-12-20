@@ -27,4 +27,15 @@ public class SoldProductService {
                 return soldProductsRepository.save(data);
         }
 
+        public List<SoldProducts> getSoldProductsByOrderDate(String orderDate) {
+                return soldProductsRepository.findSoldProductsByOrderDate(orderDate);
+        }
+
+        public List<SoldProducts> getSoldProductsByProductId(Long productId) {
+                return soldProductsRepository.findSoldProductsByProductId(productId);
+        }
+
+        public List<SoldProducts> getSoldProductsByOrderId(Long orderId) {
+                return soldProductsRepository.findSoldProductsByOrderId(orderId);
+        }
 }

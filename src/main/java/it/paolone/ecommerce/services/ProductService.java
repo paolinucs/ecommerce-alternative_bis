@@ -29,13 +29,13 @@ public class ProductService {
 
     public Product saveProduct(Product data) {
         Optional<Product> eventuallyExistingProduct = Optional
-                .ofNullable(productRepository.searchProductByBarcode(data.getBarcode()));
+                .ofNullable(productRepository.searchProductByBarcode(data.getProductBarcode()));
 
         if (eventuallyExistingProduct.isPresent()) {
             Product existingData = eventuallyExistingProduct.get();
-            int newQuantity = data.getQuantity() + existingData.getQuantity();
-            productRepository.updateProductQuantityByBarcode(data.getBarcode(), newQuantity);
-            return productRepository.searchProductByBarcode(data.getBarcode());
+            int newQuantity = data.getProductQuantity() + existingData.getProductQuantity();
+            productRepository.updateProductQuantityByBarcode(data.getProductBarcode(), newQuantity);
+            return productRepository.searchProductByBarcode(data.getProductBarcode());
         } else {
             return productRepository.save(data);
         }
@@ -52,6 +52,35 @@ public class ProductService {
 
         return null;
 
+    }
+
+    public Product getProductByBarcode(String productBarcode) {
+        Optional<Product> fetchedProduct = Optional
+                .ofNullable(productRepository.searchProductByBarcode(productBarcode));
+
+        if (fetchedProduct.isPresent()) {
+            return fetchedProduct.get();
+        }
+
+        return null;
+
+    }
+
+    public Boolean isAvaiable(Product data) {
+        int quantity = productRepository.countProductsByBarcode(data.getProductBarcode());
+        return quantity > 0 && quantity < data.getProductQuantity();
+    }
+
+    public Product updateProductQuantity(String productBarcode, int newQuantity) {
+        Optional<Product> fetchedProduct = Optional
+                .ofNullable(productRepository.searchProductByBarcode(productBarcode));
+
+        if (fetchedProduct.isPresent()) {
+            productRepository.updateProductQuantityByBarcode(productBarcode, newQuantity);
+            return productRepository.searchProductByBarcode(productBarcode);
+        }
+
+        return null;
     }
 
     public Product removeProductByBarcode(String productBarcode) {

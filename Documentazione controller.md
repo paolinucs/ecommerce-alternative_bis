@@ -11,12 +11,17 @@ Le chiamate API che gli utenti saranno in grado di effettuare (tramite frontend)
 Sono presenti anche API pubblici.
 
 L'utente ´God´ sarà in grado di:
-- Aggiungere, rimuovere e modificare i dettagli relativi agli utenti di tipo Amministratore
+- Aggiungere, rimuovere e modificare i dettagli relativi agli utenti di tipo Amministratore fatto
 
 L'utente ´Amministratore´ sarà in grado di:
-- Aggiungere, rimuovere e modificare i Prodotti
-- Consultare la lista di prodotti venduti
+- Aggiungere, rimuovere e modificare i Prodotti ok
+- Consultare la lista di prodotti venduti ok
+- Consultare la lista di prodotti venduti per data ok
+- Consultare la lista di prodotti venduti per id prodotto ok
+- Consultare la lista di prodotti venduti per id ordine ok
 - Visualizzare i dettagli degli ordini di tutti gli utenti
+- Cercare un ordine per id ordine
+- Cercare un ordine per data ordine
 
 L'utente ´Standard´ sarà in grado di:
 - Effettuare nuovi ordini

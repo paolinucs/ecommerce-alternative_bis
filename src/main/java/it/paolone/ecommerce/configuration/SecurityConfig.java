@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,6 +24,7 @@ import it.paolone.ecommerce.configuration.filter.JwtAuthFilter;
 import it.paolone.ecommerce.services.UserInfoService;
 
 @Configuration
+@Order(1)
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -50,20 +52,17 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/auth/add_new_user", "/auth/generate_token").permitAll()
-                .and()
-                .authorizeHttpRequests().requestMatchers("/auth/user/**").authenticated()
-                .and()
-                .authorizeHttpRequests().requestMatchers("/auth/admin/**").authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+        return http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(requests -> requests
+                .requestMatchers("/auth/add_new_user", "/auth/generate_token", "/auth/welcome").permitAll())
+                .authorizeHttpRequests(requests -> requests.requestMatchers("/auth/user/**").authenticated())
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/auth/admin/**").authenticated())
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/auth/god/**").authenticated())
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean

@@ -41,31 +41,8 @@ public class ProductController {
 
     }
 
-    @PostMapping("/save_product_info")
-    public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO data) {
-
-        if (data != null) {
-            try {// try catch serve per la gestione delle eccezioni
-
-                // converte il dato in DTO che sta in input in un'entità normale
-                Product convertedDataDto = productService.convertToProduct(data);
-
-                // ricreo un oggetto dto che corrisponde al ritorno convertito di
-                // productService.saveproduct(convertedDataDto)
-                ProductDTO returningProductData = productService
-                        .convertToProductDto(productService.saveProduct(convertedDataDto));
-                return ResponseEntity.ok(returningProductData);
-            } catch (ResponseStatusException exc) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "An error occurred while processing the request: " + exc);
-            } catch (Exception exc) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "An error occurred while processing the request : " + exc);
-            }
-        } else
-            return ResponseEntity.badRequest().build();
-
-    }
+   
+    
 
     @PostMapping("/update_price/{barcode}/{newPrice}")
     public ResponseEntity<ProductDTO> updateProductPrice(@PathVariable String barcode, @PathVariable float newPrice) {

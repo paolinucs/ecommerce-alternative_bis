@@ -22,4 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "DELETE FROM product WHERE barcode = ?1", nativeQuery = true)
     void deleteProductByBarcode(String productBarcode);
 
+    @Query(value = "SELECT COUNT(*) FROM product p WHERE p.barcode =? 1", nativeQuery = true)
+    Integer countProductsByBarcode(String productBarcode);
+
 }
