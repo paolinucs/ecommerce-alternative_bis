@@ -2,6 +2,7 @@ package it.paolone.ecommerce.services;
 
 import it.paolone.ecommerce.dto.CustomerDTO;
 import it.paolone.ecommerce.entities.Customer;
+import it.paolone.ecommerce.exceptions.DataNotFoundException;
 import it.paolone.ecommerce.repositories.CustomerRepository;
 import lombok.AllArgsConstructor;
 
@@ -18,6 +19,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
+    public Object saveCustomer;
 
     public Customer getCustomerById(Long query) {
         Optional<Customer> fetchedCustomer = customerRepository.findById(query);
@@ -31,6 +33,16 @@ public class CustomerService {
 
     public Customer saveCustomer(Customer data) {
         return customerRepository.save(data);
+    }
+
+    public Boolean deleteCustomer(Customer data) throws DataNotFoundException {
+        try {
+            customerRepository.delete(data);
+        } catch (IllegalArgumentException exc) {
+            throw new DataNotFoundException();
+        }
+        return true;
+
     }
 
     public Customer getCustomerByEmail(String customerEmail) {

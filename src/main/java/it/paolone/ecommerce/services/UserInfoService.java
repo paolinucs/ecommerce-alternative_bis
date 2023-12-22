@@ -1,5 +1,6 @@
 package it.paolone.ecommerce.services;
 
+import java.util.InputMismatchException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import it.paolone.ecommerce.dto.UserRegistrationDTO;
+import it.paolone.ecommerce.entities.Admin;
 import it.paolone.ecommerce.entities.Customer;
 import it.paolone.ecommerce.entities.User;
+import it.paolone.ecommerce.exceptions.DataNotFoundException;
+import it.paolone.ecommerce.exceptions.UserAndAdminEmailMismatchException;
 import it.paolone.ecommerce.exceptions.UserAndCustomerEmailMismatchException;
 import it.paolone.ecommerce.repositories.UserInfoRepository;
 import jakarta.transaction.Transactional;
@@ -31,6 +35,9 @@ public class UserInfoService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder encoder;
+
+    @Autowired
+    private AdminService adminService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,32 +63,67 @@ public class UserInfoService implements UserDetailsService {
     }
 
     public UserRegistrationDTO addUser(UserRegistrationDTO userRegistrationDTO)
-            throws UserAndCustomerEmailMismatchException {
+            throws UserAndCustomerEmailMismatchException, UserAndAdminEmailMismatchException, DataNotFoundException {
 
-        User newUser = new User();
-        Customer newCustomer = new Customer();
+        if (userRegistrationDTO != null) {
 
-        newUser.setPassword(encoder.encode(userRegistrationDTO.getPassword()));
-        newUser.setEmail(userRegistrationDTO.getEmail());
-        newUser.setRoles(userRegistrationDTO.getRoles());
+            boolean isAdmin = userRegistrationDTO.getRoles().equals("ROLE_ADMIN")
+                    || userRegistrationDTO.getRoles().equals("ROLE_GOD");
 
-        newCustomer.setNominative(userRegistrationDTO.getNominative());
-        newCustomer.setPhoneNumber(userRegistrationDTO.getPhoneNumber());
-        newCustomer.setUser(newUser);
+            User newUser = new User();
 
-        User newUserDetails = repository.save(newUser);
+            newUser.setPassword(encoder.encode(userRegistrationDTO.getPassword()));
+            newUser.setEmail(userRegistrationDTO.getEmail());
+            newUser.setRoles(userRegistrationDTO.getRoles());
 
-        Customer newCustomerDetails = customerService.saveCustomer(newCustomer);
+            User newUserDetails = repository.save(newUser);
 
-        if (!newUserDetails.getEmail().equals(newCustomerDetails.getUser().getEmail()))
-            throw new UserAndCustomerEmailMismatchException();
+            UserRegistrationDTO registrationDetails = new UserRegistrationDTO();
+            registrationDetails.setEmail(newUserDetails.getEmail());
+            registrationDetails.setRoles(newUserDetails.getRoles());
 
-        UserRegistrationDTO registrationDetails = new UserRegistrationDTO();
-        registrationDetails.setEmail(newUserDetails.getEmail());
-        registrationDetails.setRoles(newUserDetails.getRoles());
-        registrationDetails.setNominative(newCustomerDetails.getNominative());
-        registrationDetails.setPhoneNumber(newCustomer.getPhoneNumber());
+            if (isAdmin) {
+                Admin newAdmin = new Admin();
+                newAdmin.setNominative(userRegistrationDTO.getNominative());
+                newAdmin.setPhoneNumber(userRegistrationDTO.getPhoneNumber());
+                newAdmin.setUser(newUser);
+                newAdmin.setRoles(userRegistrationDTO.getRoles());
 
-        return registrationDetails;
+                Admin newAdminDetails = adminService.saveAdmin(newAdmin);
+
+                if (!newAdminDetails.getUser().getEmail().equals(newUser.getEmail())) {
+                    adminService.deleteAdmin(newAdminDetails);
+                    try {
+                        repository.delete(newUserDetails);
+                    } catch (InputMismatchException exc) {
+                        throw new DataNotFoundException();
+                    } catch (Exception exc) {
+                        throw new RuntimeException("Generic Exception: " + exc);
+                    }
+                    throw new UserAndAdminEmailMismatchException();
+                }
+
+            } else {
+
+                Customer newCustomer = new Customer();
+                newCustomer.setNominative(userRegistrationDTO.getNominative());
+                newCustomer.setPhoneNumber(userRegistrationDTO.getPhoneNumber());
+                newCustomer.setUser(newUser);
+
+                Customer newCustomerDetails = customerService.saveCustomer(newCustomer);
+
+                if (!newUserDetails.getEmail().equals(newCustomerDetails.getUser().getEmail())) {
+                    repository.delete(newUserDetails);
+                    customerService.deleteCustomer(newCustomerDetails);
+                    throw new UserAndCustomerEmailMismatchException();
+                }
+
+                registrationDetails.setNominative(newCustomerDetails.getNominative());
+                registrationDetails.setPhoneNumber(newCustomer.getPhoneNumber());
+
+            }
+            return registrationDetails;
+        } else
+            throw new IllegalArgumentException();
     }
 }

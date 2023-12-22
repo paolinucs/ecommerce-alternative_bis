@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import it.paolone.ecommerce.dto.UserRegistrationDTO;
+import it.paolone.ecommerce.exceptions.DataNotFoundException;
+import it.paolone.ecommerce.exceptions.UserAndAdminEmailMismatchException;
 import it.paolone.ecommerce.exceptions.UserAndCustomerEmailMismatchException;
 import it.paolone.ecommerce.services.UserInfoService;
 
@@ -26,17 +28,11 @@ public class GodController {
     @PostMapping("/new_admin")
     @PreAuthorize("hasAuthority('ROLE_GOD')")
     public ResponseEntity<UserRegistrationDTO> registerNewAdmin(@RequestBody UserRegistrationDTO data)
-            throws ResponseStatusException, UserAndCustomerEmailMismatchException {
+            throws ResponseStatusException, UserAndCustomerEmailMismatchException, UserAndAdminEmailMismatchException, DataNotFoundException {
 
         if (data != null) {
-
             data.setRoles("ROLE_ADMIN");
-
-            if (!data.getRoles().contains("ROLE_ADMIN"))
-                return ResponseEntity.badRequest().build();
-
             return ResponseEntity.ok(userInfoService.addUser(data));
-
         }
 
         return ResponseEntity.noContent().build();

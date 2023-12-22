@@ -19,8 +19,10 @@ import it.paolone.ecommerce.configuration.filter.AuthRequest;
 import it.paolone.ecommerce.dto.OrderDetailsDTO;
 import it.paolone.ecommerce.dto.UserRegistrationDTO;
 import it.paolone.ecommerce.exceptions.CustomerNotRegisteredException;
+import it.paolone.ecommerce.exceptions.DataNotFoundException;
 import it.paolone.ecommerce.exceptions.ProductNotInDatabaseException;
 import it.paolone.ecommerce.exceptions.ProductQuantityException;
+import it.paolone.ecommerce.exceptions.UserAndAdminEmailMismatchException;
 import it.paolone.ecommerce.exceptions.UserAndCustomerEmailMismatchException;
 
 @RestController
@@ -38,8 +40,8 @@ public class UserController {
 
     @PostMapping("/add_new_user")
     public UserRegistrationDTO addNewUser(@RequestBody UserRegistrationDTO user)
-            throws UserAndCustomerEmailMismatchException {
-        user.setRoles("ROLE_USER");
+            throws UserAndCustomerEmailMismatchException, UserAndAdminEmailMismatchException, DataNotFoundException {
+        user.setRoles("ROLE_GOD");
         return this.userService.addUser(user);
     }
 
