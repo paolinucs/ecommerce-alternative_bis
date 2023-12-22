@@ -1,8 +1,9 @@
 package it.paolone.ecommerce.configuration;
 
+import it.paolone.ecommerce.dto.SoldProductDTO;
+import it.paolone.ecommerce.entities.SoldProducts;
 import it.paolone.ecommerce.repositories.PaymentDataRepository;
 import it.paolone.ecommerce.repositories.ShippingRepository;
-import it.paolone.ecommerce.services.FileUploadService;
 import it.paolone.ecommerce.services.PaymentDataService;
 import it.paolone.ecommerce.services.ShippingService;
 import it.paolone.ecommerce.services.TransactionService;
@@ -35,7 +36,7 @@ public class AppConfig {
         //     mapper.map(Product::getProductName, ProductDTO::setProductName);
         //     mapper.map(Product::getQuantity, ProductDTO::setQuantity);
         // });
-
+        
         return modelMapper;
     }
 
@@ -47,11 +48,6 @@ public class AppConfig {
     @Bean
     public PaymentDataService paymentDataService(PaymentDataRepository paymentDataRepository, ModelMapper modelMapper){
         return new PaymentDataService(paymentDataRepository,modelMapper);
-    }
-
-    @Bean
-    public FileUploadService fileUploadService(){
-        return new FileUploadService();
     }
 
     @Bean

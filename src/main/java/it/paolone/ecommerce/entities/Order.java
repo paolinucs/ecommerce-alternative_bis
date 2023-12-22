@@ -1,5 +1,7 @@
 package it.paolone.ecommerce.entities;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -8,19 +10,16 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "order_id")
     private Long orderId;
     @Column(name = "order_date")
-    private String orderDate;
+    private LocalDate orderDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer joinedCustomer;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_id", referencedColumnName = "id")
     private Shipping joinedShipping;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
-    private Transaction joinedTransaction;
 
     // getters and setters
 
@@ -28,7 +27,7 @@ public class Order {
         return orderId;
     }
 
-    public String getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
@@ -36,7 +35,7 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public void setOrderDate(String orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -48,10 +47,6 @@ public class Order {
         return joinedShipping;
     }
 
-    public Transaction getJoinedTransaction() {
-        return joinedTransaction;
-    }
-
     public void setJoinedCustomer(Customer joinedCustomer) {
         this.joinedCustomer = joinedCustomer;
     }
@@ -60,7 +55,4 @@ public class Order {
         this.joinedShipping = joinedShipping;
     }
 
-    public void setJoinedTransaction(Transaction joinedTransaction) {
-        this.joinedTransaction = joinedTransaction;
-    }
 }

@@ -9,7 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import it.paolone.ecommerce.dto.UserRegistrationDTO;
+import it.paolone.ecommerce.entities.Customer;
 import it.paolone.ecommerce.entities.User;
+import it.paolone.ecommerce.exceptions.UserAndCustomerEmailMismatchException;
 import it.paolone.ecommerce.repositories.UserInfoRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -22,6 +25,9 @@ public class UserInfoService implements UserDetailsService {
 
     @Autowired
     private UserInfoRepository repository;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -49,23 +55,33 @@ public class UserInfoService implements UserDetailsService {
         return 1;
     }
 
-    public User addUser(User User) {
-        User.setPassword(encoder.encode(User.getPassword()));
-        User newUserDetails = repository.save(User);
-        newUserDetails.setPassword(null);
-        return newUserDetails;
+    public UserRegistrationDTO addUser(UserRegistrationDTO userRegistrationDTO)
+            throws UserAndCustomerEmailMismatchException {
+
+        User newUser = new User();
+        Customer newCustomer = new Customer();
+
+        newUser.setPassword(encoder.encode(userRegistrationDTO.getPassword()));
+        newUser.setEmail(userRegistrationDTO.getEmail());
+        newUser.setRoles(userRegistrationDTO.getRoles());
+
+        newCustomer.setNominative(userRegistrationDTO.getNominative());
+        newCustomer.setPhoneNumber(userRegistrationDTO.getPhoneNumber());
+        newCustomer.setUser(newUser);
+
+        User newUserDetails = repository.save(newUser);
+
+        Customer newCustomerDetails = customerService.saveCustomer(newCustomer);
+
+        if (!newUserDetails.getEmail().equals(newCustomerDetails.getUser().getEmail()))
+            throw new UserAndCustomerEmailMismatchException();
+
+        UserRegistrationDTO registrationDetails = new UserRegistrationDTO();
+        registrationDetails.setEmail(newUserDetails.getEmail());
+        registrationDetails.setRoles(newUserDetails.getRoles());
+        registrationDetails.setNominative(newCustomerDetails.getNominative());
+        registrationDetails.setPhoneNumber(newCustomer.getPhoneNumber());
+
+        return registrationDetails;
     }
-
-    // @Transactional
-    // public Boolean editUserEmail(String actualEmail, String newEmail) {
-    //     int isEdited = repository.updateUserEmail(actualEmail, newEmail);
-    //     return isEdited == 0;
-    // }
-
-    // @Transactional
-    // public Boolean editUserPassword(String actualPassword, String newPassword) {
-    //     int isEdited = repository.updateUserPassword(actualPassword, newPassword);
-    //     return isEdited == 0;
-    // }
-
 }

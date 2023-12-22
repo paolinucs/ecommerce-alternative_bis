@@ -11,16 +11,12 @@ public class SoldProducts {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "sold_product_id")
     private Long soldProductId;
-    // @Column(name = "product_id")
-    // private Long productId;
-    // @Column(name = "order_id")
-    // private Long orderId;
 
-    // @ManyToMany(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "product_id", referencedColumnName = "product_id")
-    // private Product joinedProduct;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_barcode", referencedColumnName = "product_barcode")
+    private Product joinedProduct;
 
-    // @ManyToMany(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "order_id", referencedColumnName = "order_id")
-    // private Order joinedOrder;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    private Order joinedOrder;
 }

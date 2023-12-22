@@ -6,11 +6,9 @@ import it.paolone.ecommerce.entities.Product;
 import it.paolone.ecommerce.services.ProductService;
 import lombok.AllArgsConstructor;
 import it.paolone.ecommerce.repositories.ProductRepository;
-import it.paolone.ecommerce.services.FileUploadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import java.util.ArrayList;
 public class ProductController {
 
     private final ProductService productService;
-    private final FileUploadService fileUploadService;
     private final ProductRepository productRepository;
 
     @GetMapping("/all_products")
@@ -40,9 +37,6 @@ public class ProductController {
         return ResponseEntity.noContent().build();
 
     }
-
-   
-    
 
     @PostMapping("/update_price/{barcode}/{newPrice}")
     public ResponseEntity<ProductDTO> updateProductPrice(@PathVariable String barcode, @PathVariable float newPrice) {
@@ -72,16 +66,6 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "An error occurred while trying to delete product n." + productBarcode + ": " + exc);
         }
-    }
-
-    @PostMapping("/api/products/save_product_thumb")
-    public ResponseEntity<String> saveProductThumbnail(@RequestParam("file") MultipartFile uploadingFile) {
-        if (!uploadingFile.isEmpty()) {
-            if (fileUploadService.saveFile(uploadingFile)) {
-                return ResponseEntity.ok("File successfully uploaded");
-            }
-        }
-        return ResponseEntity.badRequest().build();
     }
 
 }

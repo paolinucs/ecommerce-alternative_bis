@@ -5,10 +5,8 @@ import lombok.Data;
 
 @Data
 public class OrderDetailsDTO {
-
-    private OrderDTO orderData;
-    private CustomerDTO customerData;
+    private String customerEmail;
     private ShippingDTO shippingData;
-    private List<ProductDTO> productData;
-    private TransactionDetailsDTO transactionDetailsData;
+    private List<String> productsBarcode;
+    private int productQuantity;
 }

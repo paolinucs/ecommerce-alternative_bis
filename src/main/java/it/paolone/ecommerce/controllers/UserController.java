@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import it.paolone.ecommerce.configuration.filter.AuthRequest;
 import it.paolone.ecommerce.dto.OrderDetailsDTO;
-import it.paolone.ecommerce.entities.User;
+import it.paolone.ecommerce.dto.UserRegistrationDTO;
+import it.paolone.ecommerce.exceptions.CustomerNotRegisteredException;
+import it.paolone.ecommerce.exceptions.ProductNotInDatabaseException;
 import it.paolone.ecommerce.exceptions.ProductQuantityException;
+import it.paolone.ecommerce.exceptions.UserAndCustomerEmailMismatchException;
 
 @RestController
 @RequestMapping("/auth")
@@ -34,7 +37,8 @@ public class UserController {
     private OrderDetailsService orderDetailsService;
 
     @PostMapping("/add_new_user")
-    public User addNewUser(@RequestBody User user) {
+    public UserRegistrationDTO addNewUser(@RequestBody UserRegistrationDTO user)
+            throws UserAndCustomerEmailMismatchException {
         user.setRoles("ROLE_USER");
         return this.userService.addUser(user);
     }
@@ -50,10 +54,10 @@ public class UserController {
         }
     }
 
-    @PostMapping("/orders/save_new")
+    @PostMapping("/user/orders/save_new")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<OrderDetailsDTO> saveOrderData(@RequestBody OrderDetailsDTO in)
-            throws ProductQuantityException {
+            throws ProductQuantityException, CustomerNotRegisteredException, ProductNotInDatabaseException {
         if (in != null) {
             OrderDetailsDTO data = orderDetailsService.saveNewOrder(in);
             if (data != null) {

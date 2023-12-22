@@ -21,7 +21,7 @@ public class Shipping {
     @Column(name = "shipping_company")
     private String shippingCompany;
 
-    @Column(name = "tracking_code")
+    @Column(name = "tracking_code", unique = true)
     private String trackingCode;
   
     public long getId() {

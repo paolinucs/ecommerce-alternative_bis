@@ -13,9 +13,9 @@ public class Product {
     private Long productId;
     @Column(name = "product_name")
     private String productName;
-    @Column(name = "barcode")
+    @Column(name = "product_barcode", unique = true)
     private String productBarcode;
-    @Column(name = "image_filename")
+    @Column(name = "image_filename", unique = true)
     private String imageFilename;
     @Column(name = "quantity")
     private int productQuantity;

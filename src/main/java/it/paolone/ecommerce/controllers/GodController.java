@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import it.paolone.ecommerce.entities.User;
+import it.paolone.ecommerce.dto.UserRegistrationDTO;
+import it.paolone.ecommerce.exceptions.UserAndCustomerEmailMismatchException;
 import it.paolone.ecommerce.services.UserInfoService;
 
 import lombok.AllArgsConstructor;
@@ -24,7 +25,8 @@ public class GodController {
 
     @PostMapping("/new_admin")
     @PreAuthorize("hasAuthority('ROLE_GOD')")
-    public ResponseEntity<User> registerNewAdmin(@RequestBody User data) throws ResponseStatusException {
+    public ResponseEntity<UserRegistrationDTO> registerNewAdmin(@RequestBody UserRegistrationDTO data)
+            throws ResponseStatusException, UserAndCustomerEmailMismatchException {
 
         if (data != null) {
 
@@ -55,37 +57,5 @@ public class GodController {
 
         return ResponseEntity.noContent().build();
     }
-
-    // @PostMapping("/edit_user/email/{actualEmail}&{newEmail}")
-    // @PreAuthorize("hasAuthority('ROLE_GOD')")
-    // public ResponseEntity<Boolean> editUserEmail(@PathVariable String actualEmail, @PathVariable String newEmail) {
-    //     if (actualEmail != null && newEmail != null) {
-    //         Boolean isEdited = userInfoService.editUserEmail(actualEmail, newEmail);
-
-    //         if (isEdited)
-    //             return ResponseEntity.ok(isEdited);
-
-    //         return ResponseEntity.badRequest().build();
-    //     }
-
-    //     return ResponseEntity.noContent().build();
-    // }
-
-    // @PostMapping("/edit_user/password/{actualPassword}&{newPassword}")
-    // @PreAuthorize("hasAuthority('ROLE_GOD')")
-    // public ResponseEntity<Boolean> editUserPassword(@PathVariable String actualPassword,
-    //         @PathVariable String newPassword) {
-    //     if (actualPassword != null && newPassword != null) {
-    //         Boolean isEdited = userInfoService.editUserEmail(actualPassword, newPassword);
-
-    //         if (isEdited)
-    //             return ResponseEntity.ok(isEdited);
-
-    //         return ResponseEntity.badRequest().build();
-    //     }
-
-    //     return ResponseEntity.noContent().build();
-
-    // }
 
 }

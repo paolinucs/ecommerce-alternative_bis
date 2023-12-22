@@ -33,6 +33,11 @@ public class CustomerService {
         return customerRepository.save(data);
     }
 
+    public Customer getCustomerByEmail(String customerEmail) {
+        Optional<Customer> fetchedCustomer = customerRepository.getCustomerByEmail(customerEmail);
+        return fetchedCustomer.orElse(null);
+    }
+
     public CustomerDTO convertToCustomerDTO(Customer data) {
         return modelMapper.map(data, CustomerDTO.class);
     }
@@ -41,8 +46,8 @@ public class CustomerService {
         return modelMapper.map(data, Customer.class);
     }
 
-    public Boolean isCustomerAlreadyRegistered(Customer data) {
-        return customerRepository.countByEmail(data.getEmail()) > 0;
+    public Boolean isCustomerAlreadyRegistered(String customerEmail) {
+        return customerRepository.countByEmail(customerEmail) > 0;
     }
 
 }
